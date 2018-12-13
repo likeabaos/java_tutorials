@@ -11,5 +11,6 @@
 	<h2>
 		<s:property value="messageStore.message" />
 	</h2>
+	
 </body>
 </html>

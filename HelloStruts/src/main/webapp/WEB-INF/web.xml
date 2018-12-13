@@ -11,6 +11,11 @@
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+		<!-- Remove .action from the url when generating link via url tag -->
+		<init-param>
+			<param-name>struts.action.extension</param-name>
+			<param-value>,</param-value>
+		</init-param>
 	</filter>
 
 	<filter-mapping>
