@@ -16,10 +16,23 @@
 		<java.version>11</java.version>
 		<jetty.version>9.4.14.v20181114</jetty.version>
 		<maven.version>3.8.0</maven.version>
+		<commons-lang.version>[3.8,)</commons-lang.version>
+		<servlet-api.version>[4.0,)</servlet-api.version>
 		<jsf.version>[2.2,)</jsf.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
@@ -50,13 +63,13 @@
 				<version>${jetty.version}</version>
 				<configuration>
 					<webApp>
-						<contextPath>/${project.build.finalName}</contextPath>
+						<contextPath>/</contextPath>
 					</webApp>
 					<httpConnector>
 						<port>8080</port>
 					</httpConnector>
 					<stopKey>CTRL+C</stopKey>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<scanIntervalSeconds>30</scanIntervalSeconds>
 					<scanTargets>
 						<scanTarget>src/main/webapp/WEB-INF/web.xml</scanTarget>
 					</scanTargets>
