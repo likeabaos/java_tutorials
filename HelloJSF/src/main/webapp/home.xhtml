@@ -18,16 +18,32 @@
 				action="#{navigator.choosePage}" />
 		</h:form>
 	</fieldset>
-    <br />
+	<br />
 	<fieldset>
 		<legend>Choose JSF Language</legend>
 		<h:form>
 			<p>Enter a programming language that can be used to implement JSF
 				managed beans:</p>
-			<h:inputText value="#{languageForm.language}"/><br />
-			<h:commandButton value="Check Language" action="#{languageForm.showChoice}"/>
+			<h:inputText value="#{languageForm.language}" />
+			<br />
+			<h:commandButton value="Check Language"
+				action="#{languageForm.showChoice}" />
 		</h:form>
 	</fieldset>
-
+	<br />
+	<fieldset>
+		<legend>Simple Banking App</legend>
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:outputLabel for="customer_id">Customer ID:</h:outputLabel>
+				<h:inputText id="customer_id" value="#{bankingBean.customerId}" />
+				<h:outputLabel for="password">Password:</h:outputLabel>
+				<h:inputSecret id="password" value="#{bankingBean.password}" />
+			</h:panelGrid>
+			<br />
+			<h:commandButton value="Show Current Balance"
+				action="#{bankingBean.showBalance}" />
+		</h:form>
+	</fieldset>
 </h:body>
 </html>

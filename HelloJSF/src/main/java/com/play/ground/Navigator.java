@@ -1,9 +1,12 @@
 package com.play.ground;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
 import java.util.Random;
 
 @ManagedBean
+@RequestScoped
 public class Navigator {
 	private String[] results = { "page1", "page2", "page3" };
 

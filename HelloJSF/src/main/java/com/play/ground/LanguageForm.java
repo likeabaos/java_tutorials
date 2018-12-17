@@ -3,10 +3,12 @@ package com.play.ground;
 import java.util.Arrays;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
 @ManagedBean
+@RequestScoped
 public class LanguageForm {
 	private String[] validLanguages = { "java", "groovy" };
 	private String language;
