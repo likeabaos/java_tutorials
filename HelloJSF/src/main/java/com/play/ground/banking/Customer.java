@@ -1,4 +1,4 @@
-package com.play.ground;
+package com.play.ground.banking;
 
 public class Customer {
 	private String id, firstName, lastName;

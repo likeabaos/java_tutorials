@@ -1,4 +1,4 @@
-package com.play.ground;
+package com.play.ground.banking;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

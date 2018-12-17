@@ -1,4 +1,4 @@
-package com.play.ground;
+package com.play.ground.banking;
 
 import java.util.HashMap;
 import java.util.Map;
