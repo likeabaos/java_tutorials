@@ -29,12 +29,12 @@ import org.apache.logging.log4j.Logger;
 
 public class EnabledUserActiveDirectory {
     private static final Logger LOG = LogManager.getLogger();
-    static final String[] ALPHAS = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+    public static final String[] ALPHAS = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
 	    "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-    static final String[] DATA_FIELDS = new String[] { "cn", "title", "department", "division", "l", "whenCreated",
+    public static final String[] DATA_FIELDS = new String[] { "cn", "title", "department", "division", "l", "whenCreated",
 	    "info", "lastLogon", "lastLogonTimestamp", "showInAddressBook" };
 
-    static void getActiveDirectoryUsers(String username, String password, String domainController, boolean active)
+    public static void getActiveDirectoryUsers(String username, String password, String domainController, boolean active)
 	    throws IOException {
 
 	String usersContainer = "dc=" + StringUtils.replace(domainController, ".", ",dc=").replace("@", ",dc");
