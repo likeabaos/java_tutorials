@@ -40,7 +40,7 @@ public class EnabledUserActiveDirectory {
 	String usersContainer = "dc=" + StringUtils.replace(domainController, ".", ",dc=").replace("@", ",dc");
 	String ldapFilter = (active)
 		? "(&(objectCategory=person)(objectClass=user)(givenName=*)(sn={alpha}*)(manager=*)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))"
-		: "(&(objectCategory=person)(objectClass=user)(givenName=*)(sn={alpha}*)(cn=*,*)(UserAccountControl:1.2.840.113556.1.4.803:=2))";
+		: "(&(objectCategory=person)(objectClass=user)(givenName=*)(sn={alpha}*)(cn=*,*))";
 
 	Properties properties = new Properties();
 	properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
