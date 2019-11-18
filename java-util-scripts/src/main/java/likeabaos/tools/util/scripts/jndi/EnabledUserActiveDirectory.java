@@ -12,8 +12,6 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
@@ -31,8 +29,6 @@ public class EnabledUserActiveDirectory {
     private static final Logger LOG = LogManager.getLogger();
     public static final String[] ALPHAS = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
 	    "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-    public static final String[] DATA_FIELDS = new String[] { "cn", "title", "department", "division", "l",
-	    "whenCreated", "info", "lastLogon", "lastLogonTimestamp", "showInAddressBook" };
 
     public static List<String[]> getActiveDirectoryUsers(String username, String password, String domainController,
 	    boolean active) throws IOException {
@@ -76,7 +72,7 @@ public class EnabledUserActiveDirectory {
 			break;
 		    count++;
 		    SearchResult rslt = (SearchResult) answer.next();
-		    extractAttrs(rslt, DATA_FIELDS, data);
+		    QueryActiveDirectory.extractAttrs(rslt, QueryActiveDirectory.DEFAULT_DATA_FIELDS, data);
 		    if (hasLimit && count >= 10)
 			break;
 		}
@@ -113,73 +109,9 @@ public class EnabledUserActiveDirectory {
 	File file = new File("output/employees/" + fullFilename);
 	LOG.info("Saving CSV to: {}", file.getAbsolutePath());
 	FileUtils.forceMkdirParent(file);
-	try (CSVPrinter printer = new CSVPrinter(new FileWriter(file),
-		CSVFormat.EXCEL.withHeader(DATA_FIELDS).withQuoteMode(QuoteMode.NON_NUMERIC))) {
+	try (CSVPrinter printer = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL
+		.withHeader(QueryActiveDirectory.DEFAULT_DATA_FIELDS).withQuoteMode(QuoteMode.NON_NUMERIC))) {
 	    printer.printRecords(data);
-	}
-    }
-
-    static void extractAttrs(SearchResult rslt, String[] fields, List<String[]> data) {
-	if (rslt == null)
-	    return;
-
-	if (fields == null) {
-	    printAttrs(rslt.getAttributes());
-	    return;
-	}
-
-	String[] line = new String[fields.length];
-	data.add(line);
-
-	int count = 0;
-	for (String field : fields) {
-	    String value;
-	    try {
-		value = getAttributeValue(rslt.getAttributes().get(field));
-		if (field.startsWith("lastLogon") && !StringUtils.isBlank(value)) {
-		    long fileTime = Long.parseLong(value);
-		    Date date = new Date(fileTime / 10000L - 11644473600000L);
-		    value = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(date);
-		}
-	    } catch (Exception e) {
-		value = "error";
-	    }
-	    line[count++] = value;
-	}
-    }
-
-    static String getAttributeValue(Attribute attr) throws NamingException {
-	if (attr == null)
-	    return null;
-
-	StringBuilder sb = new StringBuilder();
-	int count = 0;
-	for (NamingEnumeration<?> e = attr.getAll(); e.hasMore();) {
-	    if (++count > 1)
-		sb.append("; ");
-	    sb.append(String.valueOf(e.next()));
-	}
-	return sb.toString();
-    }
-
-    static void printAttrs(Attributes attrs) {
-	if (attrs == null) {
-	    System.out.println("No attributes");
-	    return;
-	}
-
-	try {
-	    for (NamingEnumeration<? extends Attribute> ae = attrs.getAll(); ae.hasMore();) {
-		Attribute attr = (Attribute) ae.next();
-		System.out.println("attribute: " + attr.getID());
-
-		/* print each value */
-		for (NamingEnumeration<?> e = attr.getAll(); e.hasMore();) {
-		    System.out.println("value: " + e.next());
-		}
-	    }
-	} catch (NamingException e) {
-	    e.printStackTrace();
 	}
     }
 }
