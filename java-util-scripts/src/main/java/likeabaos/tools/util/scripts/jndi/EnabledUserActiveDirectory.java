@@ -29,13 +29,13 @@ import org.apache.logging.log4j.Logger;
 
 public class EnabledUserActiveDirectory {
     private static final Logger LOG = LogManager.getLogger();
-    public static final String[] ALPHAS = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
-	    "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-    public static final String[] DATA_FIELDS = new String[] { "cn", "title", "department", "division", "l", "whenCreated",
-	    "info", "lastLogon", "lastLogonTimestamp", "showInAddressBook" };
+    public static final String[] ALPHAS = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+	    "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+    public static final String[] DATA_FIELDS = new String[] { "cn", "title", "department", "division", "l",
+	    "whenCreated", "info", "lastLogon", "lastLogonTimestamp", "showInAddressBook" };
 
-    public static void getActiveDirectoryUsers(String username, String password, String domainController, boolean active)
-	    throws IOException {
+    public static List<String[]> getActiveDirectoryUsers(String username, String password, String domainController,
+	    boolean active) throws IOException {
 
 	String usersContainer = "dc=" + StringUtils.replace(domainController, ".", ",dc=").replace("@", ",dc");
 	String ldapFilter = (active)
@@ -94,16 +94,28 @@ public class EnabledUserActiveDirectory {
 		}
 	}
 
+	return data;
+    }
+
+    public static void exportCsv(String username, String password, String domainController, boolean active)
+	    throws IOException {
+	List<String[]> data = getActiveDirectoryUsers(username, password, domainController, active);
 	if (data.size() > 0) {
-	    String filename = (active) ? "active_employees_" : "in-active_employees_";
-	    filename = filename + new SimpleDateFormat("yyyyMMdd_HHmmssZ").format(new Date()) + ".csv";
-	    File file = new File("output/employees/" + filename);
-	    LOG.info("Saving CSV to: {}", file.getAbsolutePath());
-	    FileUtils.forceMkdirParent(file);
-	    try (CSVPrinter printer = new CSVPrinter(new FileWriter(file),
-		    CSVFormat.EXCEL.withHeader(DATA_FIELDS).withQuoteMode(QuoteMode.NON_NUMERIC))) {
-		printer.printRecords(data);
-	    }
+	    String filename = (active) ? "active_employees" : "in-active_employees";
+	    exportCsv(data, filename);
+	} else {
+	    LOG.warn("No data returned from query");
+	}
+    }
+
+    public static void exportCsv(List<String[]> data, String filename) throws IOException {
+	String fullFilename = filename + new SimpleDateFormat("_yyyyMMdd_HHmmssZ").format(new Date()) + ".csv";
+	File file = new File("output/employees/" + fullFilename);
+	LOG.info("Saving CSV to: {}", file.getAbsolutePath());
+	FileUtils.forceMkdirParent(file);
+	try (CSVPrinter printer = new CSVPrinter(new FileWriter(file),
+		CSVFormat.EXCEL.withHeader(DATA_FIELDS).withQuoteMode(QuoteMode.NON_NUMERIC))) {
+	    printer.printRecords(data);
 	}
     }
 
